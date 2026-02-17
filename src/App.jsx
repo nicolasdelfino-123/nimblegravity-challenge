@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import JobCard from "./components/JobCard";
+
 
 
 const API_BASE_URL = "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net";
@@ -99,67 +101,21 @@ function App() {
         </h1>
 
         {jobs.map((job) => (
-          <div
+          <JobCard
             key={job.id}
-            style={{
-              marginBottom: 16,
-              padding: 16,
-              border: "1px solid #e5e5e5",
-              borderRadius: 8,
-              background: "#ffffff",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              textAlign: "left",
-            }}
-          >
-            <strong style={{ fontSize: 15 }}>{job.title}</strong>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 8,
-                marginTop: 12,
-                justifyContent: "center",
-              }}
-            >
-              <input
-                type="text"
-                placeholder="URL de tu repositorio"
-                value={repoUrlByJobId[job.id] ?? ""}
-                onChange={(e) =>
-                  setRepoUrlByJobId((prev) => ({
-                    ...prev,
-                    [job.id]: e.target.value,
-                  }))
-                }
-                style={{
-                  flex: 1,
-                  padding: "9px 10px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 14,
-                }}
-              />
-
-              <button
-                disabled={loadingJobId === job.id}
-                onClick={() => handleApply(job.id)}
-                style={{
-                  padding: "9px 16px",
-                  borderRadius: 6,
-                  border: "none",
-                  background: loadingJobId === job.id ? "#999" : "#111",
-                  color: "#fff",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  cursor:
-                    loadingJobId === job.id ? "not-allowed" : "pointer",
-                }}
-              >
-                {loadingJobId === job.id ? "Enviando..." : "Submit"}
-              </button>
-            </div>
-          </div>
+            job={job}
+            repoUrl={repoUrlByJobId[job.id] ?? ""}
+            onRepoChange={(id, value) =>
+              setRepoUrlByJobId((prev) => ({
+                ...prev,
+                [id]: value,
+              }))
+            }
+            onApply={handleApply}
+            isLoading={loadingJobId === job.id}
+          />
         ))}
+
       </div>
     </div>
   );
