@@ -1,16 +1,44 @@
-# React + Vite
+# Nimble Gravity Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mini aplicación en React que consume la API provista para listar posiciones abiertas y permitir enviar una postulación.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Obtiene las posiciones disponibles desde la API
+- Permite ingresar la URL del repositorio
+- Envía la postulación a la posición seleccionada
+- Maneja estados de carga y errores de conexión
 
-## React Compiler
+## Tecnologías
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Fetch API
+- JavaScript (ES6)
 
-## Expanding the ESLint configuration
+## Instalación
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## API utilizada
+
+**Base URL:**
+```
+https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net
+```
+
+**Endpoints:**
+
+- `GET /api/jobs/get-list`
+- `POST /api/candidate/apply-to-job`
+
+## Uso
+
+1. Al cargar la aplicación se listan automáticamente las posiciones disponibles.
+2. Ingresar la URL del repositorio de GitHub.
+3. Presionar **Submit** para enviar la postulación.
+
+## Notas
+
+La aplicación realiza la carga de posiciones al montarse y muestra feedback visual durante el envío.
