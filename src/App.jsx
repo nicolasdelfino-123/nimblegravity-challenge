@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+
+
+const API_BASE_URL = "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net";
 const CANDIDATE_UUID = "ad4e70a3-7114-4754-9ad3-148418ec6201";
 const CANDIDATE_ID = "74103136005";
-const API_BASE_URL = "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net";
 const APPLICATION_ID = "77767838005";
-
-
 
 
 function App() {
@@ -16,13 +16,9 @@ function App() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/jobs/get-list`
-        );
-
+        const response = await fetch(`${API_BASE_URL}/api/jobs/get-list`);
         const data = await response.json();
         setJobs(data);
-
       } catch (error) {
         console.error("Error fetching jobs:", error);
       }
@@ -30,6 +26,7 @@ function App() {
 
     fetchJobs();
   }, []);
+
 
   const handleApply = async (jobId) => {
     const repoUrl = repoUrlByJobId[jobId];
@@ -46,15 +43,13 @@ function App() {
         `${API_BASE_URL}/api/candidate/apply-to-job`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             uuid: CANDIDATE_UUID,
             candidateId: CANDIDATE_ID,
             applicationId: APPLICATION_ID,
-            jobId: jobId,
-            repoUrl: repoUrl,
+            jobId,
+            repoUrl,
           }),
         }
       );
@@ -65,9 +60,7 @@ function App() {
         throw new Error("Request failed");
       }
 
-
       const data = await response.json();
-
 
       if (data.ok) {
         alert("Postulación enviada correctamente ✅");
@@ -84,48 +77,92 @@ function App() {
 
 
   return (
-    <div style={{ maxWidth: 600, margin: "40px auto", fontFamily: "Arial" }}>
-      <h1>Posiciones disponibles</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        paddingTop: 20,
+        fontFamily: "system-ui, Arial",
+        width: "100%",
+      }}
+    >
 
-      {jobs.map((job) => (
-        <div key={job.id} style={{
-          marginBottom: "12px",
-          padding: "10px",
-          border: "1px solid #ddd",
-          borderRadius: "6px"
-        }}>
-          <strong>{job.title}</strong>
+      <div
+        style={{
+          width: 620,
+          margin: "0 auto",
+        }}
+      >
 
-          <div>
-            <input
-              type="text"
-              placeholder="URL de tu repositorio"
-              value={repoUrlByJobId[job.id] ?? ""}
-              onChange={(event) => {
-                const newRepoUrl = event.target.value;
 
-                setRepoUrlByJobId((prev) => ({
-                  ...prev,
-                  [job.id]: newRepoUrl,
-                }));
+        <h1 style={{ marginBottom: 30, fontWeight: 600, textAlign: "center" }}>
+          Posiciones abiertas
+        </h1>
+
+        {jobs.map((job) => (
+          <div
+            key={job.id}
+            style={{
+              marginBottom: 16,
+              padding: 16,
+              border: "1px solid #e5e5e5",
+              borderRadius: 8,
+              background: "#ffffff",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+              textAlign: "left",
+            }}
+          >
+            <strong style={{ fontSize: 15 }}>{job.title}</strong>
+
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                marginTop: 12,
+                justifyContent: "center",
               }}
-            />
-
-            <button
-              disabled={loadingJobId === job.id}
-              style={{ cursor: loadingJobId === job.id ? "not-allowed" : "pointer" }}
-              onClick={() => handleApply(job.id)}
             >
-              {loadingJobId === job.id ? "Enviando..." : "Submit"}
-            </button>
+              <input
+                type="text"
+                placeholder="URL de tu repositorio"
+                value={repoUrlByJobId[job.id] ?? ""}
+                onChange={(e) =>
+                  setRepoUrlByJobId((prev) => ({
+                    ...prev,
+                    [job.id]: e.target.value,
+                  }))
+                }
+                style={{
+                  flex: 1,
+                  padding: "9px 10px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  fontSize: 14,
+                }}
+              />
 
-
+              <button
+                disabled={loadingJobId === job.id}
+                onClick={() => handleApply(job.id)}
+                style={{
+                  padding: "9px 16px",
+                  borderRadius: 6,
+                  border: "none",
+                  background: loadingJobId === job.id ? "#999" : "#111",
+                  color: "#fff",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  cursor:
+                    loadingJobId === job.id ? "not-allowed" : "pointer",
+                }}
+              >
+                {loadingJobId === job.id ? "Enviando..." : "Submit"}
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
-
 }
 
 export default App;
